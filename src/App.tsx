@@ -33,12 +33,17 @@ function App() {
             </div>
           </div>
 
-          <div className="mt-8 p-4 bg-blue-900/30 border border-blue-700 rounded-lg max-w-2xl">
-            <p className="text-sm text-blue-300">
-              <strong>Status:</strong> Vite dev server running on port 5000
+          <div className="mt-8 p-4 bg-green-900/30 border border-green-700 rounded-lg max-w-2xl">
+            <p className="text-sm text-green-300">
+              <strong>Phase 2 Setup Complete!</strong>
             </p>
             <p className="text-xs text-gray-400 mt-2">
-              Configure Supabase secrets in Replit Secrets to proceed with Phase 2
+              ✓ Supabase migrations created<br/>
+              ✓ Edge functions ready<br/>
+              ✓ Dev server running on port 5000
+            </p>
+            <p className="text-xs text-orange-400 mt-2">
+              Next: Configure VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY in Replit Secrets
             </p>
           </div>
         </div>

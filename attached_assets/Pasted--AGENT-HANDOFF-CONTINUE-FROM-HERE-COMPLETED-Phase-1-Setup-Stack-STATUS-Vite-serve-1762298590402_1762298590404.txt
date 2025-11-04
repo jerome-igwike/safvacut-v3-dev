@@ -1,0 +1,116 @@
+**AGENT HANDOFF — CONTINUE FROM HERE**
+
+**COMPLETED:** Phase 1: Setup Stack  
+**STATUS:** Vite server LIVE on 5173 | Preview WORKS via "Open in new tab"  
+**REPO:** https://github.com/bubework10-oss/safvacut-v3-dev  
+**FILES READY:** `src/`, `vite.config.ts`, `.replit`, `public/images/`  
+**NEXT PHASE:** Phase 2: Supabase Schema & Backend  
+
+**INSTRUCTIONS FOR NEXT AGENT:**  
+1. Run:  
+   ```bash
+   pkill -f node
+   rm -rf node_modules/.vite
+   npm install
+   npm run dev
+
+Confirm preview shows: "Safvacut V3 - Phase 1 Complete"
+Create folder: supabase/migrations/
+Create file: supabase/migrations/001_init.sql with full schema:
+sql-- Enable extensions
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
+-- profiles
+CREATE TABLE profiles (
+  id UUID PRIMARY KEY REFERENCES auth.users ON DELETE CASCADE,
+  uid TEXT UNIQUE NOT NULL DEFAULT 'SFV-' || substr(md5(random()::text), 1, 8) || '-' || substr(md5(random()::text), 1, 8),
+  email TEXT,
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- balances
+CREATE TABLE balances (
+  id SERIAL PRIMARY KEY,
+  user_id UUID REFERENCES profiles(id) ON DELETE CASCADE,
+  token TEXT NOT NULL,
+  amount DECIMAL(20,8) DEFAULT 0,
+  UNIQUE(user_id, token)
+);
+
+-- transactions
+CREATE TABLE transactions (
+  id SERIAL PRIMARY KEY,
+  user_id UUID REFERENCES profiles(id),
+  type TEXT CHECK (type IN ('deposit', 'withdraw', 'transfer')),
+  token TEXT,
+  amount DECIMAL(20,8),
+  status TEXT DEFAULT 'pending',
+  tx_hash TEXT,
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- withdrawals
+CREATE TABLE withdrawals (
+  id SERIAL PRIMARY KEY,
+  user_id UUID REFERENCES profiles(id),
+  token TEXT,
+  amount DECIMAL(20,8),
+  to_address TEXT,
+  status TEXT DEFAULT 'pending',
+  tx_hash TEXT,
+  requested_at TIMESTAMPTZ DEFAULT NOW(),
+  processed_at TIMESTAMPTZ
+);
+
+-- deposit_addresses
+CREATE TABLE deposit_addresses (
+  id SERIAL PRIMARY KEY,
+  user_id UUID REFERENCES profiles(id),
+  token TEXT,
+  address TEXT UNIQUE,
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- admins
+CREATE TABLE admins (
+  user_id UUID PRIMARY KEY REFERENCES profiles(id)
+);
+
+-- Indexes
+CREATE INDEX idx_balances_user ON balances(user_id);
+CREATE INDEX idx_transactions_user ON transactions(user_id);
+CREATE INDEX idx_withdrawals_status ON withdrawals(status);
+CREATE INDEX idx_profiles_uid ON profiles(uid);
+
+-- RLS: Enable
+ALTER TABLE profiles ENABLE ROW LEVEL SECURITY;
+ALTER TABLE balances ENABLE ROW LEVEL SECURITY;
+ALTER TABLE transactions ENABLE ROW LEVEL SECURITY;
+ALTER TABLE withdrawals ENABLE ROW LEVEL SECURITY;
+ALTER TABLE deposit_addresses ENABLE ROW LEVEL SECURITY;
+
+-- RLS Policies
+CREATE POLICY "users_own_data" ON profiles FOR ALL USING (auth.uid() = id);
+CREATE POLICY "users_own_balances" ON balances FOR ALL USING (auth.uid() = (SELECT id FROM profiles WHERE id = user_id));
+CREATE POLICY "users_own_transactions" ON transactions FOR ALL USING (auth.uid() = (SELECT id FROM profiles WHERE id = user_id));
+CREATE POLICY "users_own_withdrawals" ON withdrawals FOR ALL USING (auth.uid() = (SELECT id FROM profiles WHERE id = user_id));
+CREATE POLICY "users_own_deposits" ON deposit_addresses FOR ALL USING (auth.uid() = (SELECT id FROM profiles WHERE id = user_id));
+
+-- Admin full access
+CREATE POLICY "admin_all_profiles" ON profiles FOR ALL USING (EXISTS (SELECT 1 FROM admins WHERE user_id = auth.uid()));
+CREATE POLICY "admin_all_balances" ON balances FOR ALL USING (EXISTS (SELECT 1 FROM admins WHERE user_id = auth.uid()));
+CREATE POLICY "admin_all_transactions" ON transactions FOR ALL USING (EXISTS (SELECT 1 FROM admins WHERE user_id = auth.uid()));
+CREATE POLICY "admin_all_withdrawals" ON withdrawals FOR ALL USING (EXISTS (SELECT 1 FROM admins WHERE user_id = auth.uid()));
+
+Create Edge Functions:
+
+supabase/functions/credit_deposit/index.ts
+supabase/functions/approve_withdrawal/index.ts
+
+
+Add .env with:
+textVITE_SUPABASE_URL=your_url
+VITE_SUPABASE_ANON_KEY=your_key
+(Add as Replit secrets later)
+Commit & push
+End with handoff block

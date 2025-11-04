@@ -11,14 +11,11 @@ export default defineConfig({
   },
   server: {
     host: "0.0.0.0",
-    port: 5173,
+    port: 5000,
     strictPort: true,
-    // FORCE ALLOW ALL REPLIT SUBDOMAINS
     hmr: {
       host: "0.0.0.0",
       protocol: "ws",
     },
-    // ALLOW ALL HOSTS (NUKE SECURITY FOR DEV)
-    allowedHosts: [".replit.dev", ".replit.co", "localhost"],
   },
 });

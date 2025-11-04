@@ -1,38 +1,10 @@
-modules = ["web", "nodejs-20"]
-[agent]
-expertMode = true
+run = "npm run dev"
+port = 5173
+modules = ["nodejs-20"]
 
 [nix]
 channel = "stable-25_05"
 
-[workflows]
-runButton = "Project"
-
-[[workflows.workflow]]
-name = "Project"
-mode = "parallel"
-author = "agent"
-
-[[workflows.workflow.tasks]]
-task = "workflow.run"
-args = "vite-dev"
-
-[[workflows.workflow]]
-name = "vite-dev"
-author = "agent"
-
-[[workflows.workflow.tasks]]
-task = "shell.exec"
-args = "npm run dev"
-waitForPort = 5000
-
-[workflows.workflow.metadata]
-outputType = "webview"
-
 [[ports]]
-localPort = 5000
+localPort = 5173
 externalPort = 80
-
-[deployment]
-deploymentTarget = "autoscale"
-run = ["node", "server.js"]

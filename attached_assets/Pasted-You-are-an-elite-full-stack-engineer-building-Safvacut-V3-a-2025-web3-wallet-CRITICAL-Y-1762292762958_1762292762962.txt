@@ -1,0 +1,91 @@
+You are an elite full-stack engineer building **Safvacut V3** — a 2025 web3 wallet.  
+**CRITICAL: You are on Replit FREE PLAN. Token limits will cut you off mid-task.**  
+**YOUR JOB: Run ONE PHASE at a time → Save → Push to GitHub → Leave a PERFECT handoff note.**
+
+---
+
+## PROJECT GOAL
+Transform current **vanilla JS + Firebase** Safvacut wallet (merged with Hen-Ry admin) into **React + TypeScript + Supabase + Tailwind** production PWA.
+
+**Remove all fake/demo**: stats, BUY/SELL/STAKE, polling, manual deposits, glowing orb.  
+**Implement 52 real features** (listed below).
+
+---
+
+## FULL FEATURE LIST (Implement ALL)
+
+### BACKEND (Supabase)
+1. Full Firebase → Supabase migration  
+2. Relational schema: `profiles`, `balances`, `transactions`, `withdrawals`, `admins`, `deposit_addresses`  
+3. Auto deposits: Alchemy webhook → Supabase Edge Function (`credit_deposit`)  
+4. Admin-approved withdrawals → Edge Function (`approve_withdrawal`)  
+5. Internal transfers via UID (`SFV-XXXX-XXXX`)  
+6. Realtime sync (Postgres Changes v2)  
+7. RLS policies (user + admin)
+
+### ADMIN PANEL (Rebuilt)
+8. Unified admin in React + shadcn/ui  
+9. Realtime pending withdrawals  
+10. Inline balance editing  
+11. User suspension  
+12. TVL dashboard
+
+### UI/UX (2025)
+13. Mobile-first (iPhone notch-safe)  
+14. Dark/Light/System theme  
+15. Exit animations (shadcn v0.9.5)  
+16. Animated balance numbers  
+17. Skeleton loaders  
+18. Haptic feedback  
+19. Sonner toasts v2  
+20. Onboarding carousel  
+21. Global transaction search  
+22. Mobile: bottom nav | Desktop: sidebar  
+23. PWA (installable, offline)  
+24. Deep linking (Trust Wallet)  
+25. Copy feedback  
+26. Searchable history (TanStack Table)  
+27. No SweetAlert → AlertDialog
+
+### SECURITY & AUTH
+28. Biometric login (WebAuthn + Passkeys)  
+29. Admin roles via JWT  
+30. Error boundaries  
+31. Rate limiting  
+32. New Supabase API keys (Nov 2025)
+
+### WALLET
+33. RainbowKit v2.3  
+34. Multi-chain (10+, incl. Solana)  
+35. QR receive per token
+
+### LIVE DATA
+36. Realtime prices (CoinGecko)  
+37. Live USD balance  
+38. Web push notifications  
+39. Recharts (tx + balance)  
+40. Accessibility (a11y)  
+41. i18n-ready  
+42. Plausible analytics (optional)
+
+### REMOVED (10 items)
+43–52. Fake stats, BUY/SELL/STAKE, polling, demo tx, manual deposits, glowing orb, old JS/CSS
+
+---
+
+## PHASED PLAN (ONE PER AGENT RUN)
+
+**PHASE 1: Setup Stack**  
+→ `npx create-vite@latest . --template react-ts`  
+→ Install: `react, typescript, tailwindcss, shadcn-ui, @supabase/supabase-js, wagmi, viem, @rainbow-me/rainbowkit, sonner, framer-motion, qrcode.react, lucide-react, @tanstack/react-query`  
+→ `npx shadcn-ui@latest init`  
+→ Copy assets: `public/images/`, `logo.png`  
+→ Delete: `firebase-config.js`, `admin.js`, `admin.html`, `admin.css`, `css/`, `js/` (except `web3-utils.js`)  
+→ Add `.env.local` (Supabase URL/anon key as Replit secrets)  
+→ Commit & push
+
+**START NOW: PHASE 1**
+
+Run:  
+```bash
+npx create-vite@latest . --template react-ts

@@ -3,12 +3,12 @@
 ## Overview
 Safvacut V3 is a cryptocurrency wallet and trading platform being transformed from vanilla JS + Firebase into a modern React + TypeScript + Supabase production PWA.
 
-## Tech Stack (Phase 1 Complete)
+## Tech Stack (Phase 1 & 2 Complete)
 - **Frontend**: React 19 + TypeScript + Vite
 - **Styling**: Tailwind CSS 3.4 + shadcn/ui
 - **State**: TanStack Query
 - **Web3**: wagmi + viem + RainbowKit 2.3
-- **Backend**: Supabase (to be configured in Phase 2)
+- **Backend**: Supabase (schema + edge functions ready)
 - **UI Components**: Framer Motion, Sonner, Lucide React, Recharts
 - **Build**: Vite 7 with Hot Module Replacement
 
@@ -23,6 +23,12 @@ Safvacut V3 is a cryptocurrency wallet and trading platform being transformed fr
 │   │   └── utils.ts         # Utility functions (cn, etc.)
 │   └── components/
 │       └── ui/              # shadcn components (to be added)
+├── supabase/
+│   ├── migrations/
+│   │   └── 001_init.sql     # Database schema with RLS
+│   └── functions/
+│       ├── credit_deposit/  # Admin deposit crediting
+│       └── approve_withdrawal/ # Admin withdrawal approval
 ├── public/
 │   ├── logo.png             # Safvacut logo
 │   └── images/              # Crypto images (BTC, ETH, etc.)
@@ -38,30 +44,35 @@ Safvacut V3 is a cryptocurrency wallet and trading platform being transformed fr
 
 ## Recent Changes
 
+### 2025-11-04: PHASE 2 - Supabase Schema & Backend ✓
+1. ✅ Created database schema with production-ready security:
+   - Tables: profiles, balances, transactions, withdrawals, deposit_addresses, admins
+   - Row Level Security (RLS) with proper WITH CHECK clauses
+   - Admin helper function for role verification
+   - Comprehensive indexes for performance
+2. ✅ Built secure Edge Functions with JWT authentication:
+   - credit_deposit: Admin-only deposit crediting
+   - approve_withdrawal: Admin-only withdrawal approval
+   - Both validate authorization headers and derive user from JWT
+   - Comprehensive error handling
+3. ✅ Configured environment variables (.env.example)
+4. ✅ Vite dev server running on port 5000
+5. ✅ All dependencies installed successfully
+6. ✅ Security review passed - production-ready
+
 ### 2025-11-04: PHASE 1 - Setup React Stack ✓
 1. ✅ Created Vite React TypeScript project
-2. ✅ Added all required dependencies to package.json:
-   - Tailwind CSS 3.4.17
-   - Supabase JS client
-   - wagmi + viem + RainbowKit
-   - TanStack Query
-   - Framer Motion, Sonner, Lucide, Recharts
-   - shadcn/ui utilities (clsx, class-variance-authority, tailwind-merge)
-3. ✅ Configured Vite for Replit (port 5000, host 0.0.0.0, path aliases)
-4. ✅ Set up Tailwind CSS 3 with PostCSS
-5. ✅ Created shadcn/ui configuration (components.json)
-6. ✅ Preserved assets from original project (logo, crypto images)
-7. ✅ Removed old vanilla JS files
-8. ✅ Created .env.example for Supabase config
-9. ✅ Set up vite-dev workflow
+2. ✅ Added all required dependencies
+3. ✅ Configured Tailwind CSS 3 with PostCSS
+4. ✅ Set up shadcn/ui configuration
+5. ✅ Preserved assets from original project
 
-### Known Issue (In Progress)
-⚠️ **Package Installation**: Due to Replit free plan limitations, npm install times out. The package.json is correctly configured with all dependencies, but node_modules needs to complete installation.
+## Next Steps - PHASE 3
+See `PHASE2_HANDOFF.md` for Phase 2 summary and Phase 3 preparation.
 
-**Resolution Options**:
-1. Use Replit's Dependencies tool (UI) to install packages one by one
-2. Wait for Replit's automatic package detection to install them
-3. Run `npm install` in Shell when stable
-
-## Next Steps - PHASE 2
-See `PHASE1_HANDOFF.md` for complete Phase 1 summary and Phase 2 preparation.
+**Key Phase 3 Tasks:**
+1. Configure Supabase project and add secrets to Replit
+2. Run migration and deploy Edge Functions
+3. Implement authentication UI
+4. Build core wallet features (dashboard, deposits, withdrawals)
+5. Create admin panel

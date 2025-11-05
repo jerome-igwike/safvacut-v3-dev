@@ -1,6 +1,6 @@
 run = "npm run dev"
 port = 5173
-modules = ["nodejs-20"]
+modules = ["nodejs-20", "web"]
 
 [nix]
 channel = "stable-25_05"
@@ -15,6 +15,7 @@ externalPort = 80
 
 [agent]
 expertMode = true
+integrations = ["javascript_database:1.0.0"]
 
 [workflows]
 runButton = "Project"

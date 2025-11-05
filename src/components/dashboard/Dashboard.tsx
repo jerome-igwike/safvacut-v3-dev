@@ -36,7 +36,7 @@ export function Dashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-gray-100 to-gray-200 dark:from-gray-900 dark:via-gray-800 dark:to-black text-gray-900 dark:text-white transition-colors">
       <div className="container mx-auto px-4 py-8 max-w-4xl">
         <div className="flex items-center justify-between mb-8">
           <div className="flex items-center gap-4">
@@ -52,14 +52,14 @@ export function Dashboard() {
                 haptics.light()
                 toggleDarkMode()
               }}
-              className="p-2 bg-gray-800 hover:bg-gray-700 rounded-lg transition-colors"
+              className="p-2 bg-gray-200 dark:bg-gray-800 hover:bg-gray-300 dark:hover:bg-gray-700 rounded-lg transition-colors"
               aria-label="Toggle dark mode"
             >
               {darkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
             </button>
             <button
               onClick={handleSignOut}
-              className="flex items-center gap-2 px-4 py-2 bg-gray-800 hover:bg-gray-700 rounded-lg transition-colors"
+              className="flex items-center gap-2 px-4 py-2 bg-gray-200 dark:bg-gray-800 hover:bg-gray-300 dark:hover:bg-gray-700 rounded-lg transition-colors"
             >
               <LogOut className="w-4 h-4" />
               Sign Out
@@ -69,7 +69,7 @@ export function Dashboard() {
 
         {isAdmin && (
           <div className="bg-orange-500/10 border border-orange-500/30 rounded-lg p-4 mb-6">
-            <p className="text-orange-400 font-semibold">🔑 Admin Panel Access</p>
+            <p className="text-orange-600 dark:text-orange-400 font-semibold">🔑 Admin Panel Access</p>
           </div>
         )}
 
@@ -93,7 +93,7 @@ export function Dashboard() {
           <Link
             to="/deposit"
             onClick={() => haptics.light()}
-            className="bg-gray-800 hover:bg-gray-700 rounded-lg p-6 transition-colors flex flex-col items-center gap-3"
+            className="bg-gray-200 dark:bg-gray-800 hover:bg-gray-300 dark:hover:bg-gray-700 rounded-lg p-6 transition-colors flex flex-col items-center gap-3"
           >
             <div className="bg-green-500/20 p-3 rounded-full">
               <ArrowDownLeft className="w-6 h-6 text-green-500" />
@@ -104,7 +104,7 @@ export function Dashboard() {
           <Link
             to="/withdraw"
             onClick={() => haptics.light()}
-            className="bg-gray-800 hover:bg-gray-700 rounded-lg p-6 transition-colors flex flex-col items-center gap-3"
+            className="bg-gray-200 dark:bg-gray-800 hover:bg-gray-300 dark:hover:bg-gray-700 rounded-lg p-6 transition-colors flex flex-col items-center gap-3"
           >
             <div className="bg-red-500/20 p-3 rounded-full">
               <ArrowUpRight className="w-6 h-6 text-red-500" />
@@ -113,10 +113,10 @@ export function Dashboard() {
           </Link>
         </div>
 
-        <div className="bg-gray-800 rounded-lg p-6">
+        <div className="bg-gray-200 dark:bg-gray-800 rounded-lg p-6">
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-lg font-semibold">Assets</h3>
-            <RefreshCw className="w-4 h-4 text-gray-400" />
+            <RefreshCw className="w-4 h-4 text-gray-500 dark:text-gray-400" />
           </div>
 
           <div className="space-y-3">
@@ -128,7 +128,7 @@ export function Dashboard() {
               return (
                 <div
                   key={token}
-                  className="bg-gray-900/50 rounded-lg p-4 flex items-center justify-between"
+                  className="bg-gray-100 dark:bg-gray-900/50 rounded-lg p-4 flex items-center justify-between"
                 >
                   <div className="flex items-center gap-3">
                     <div className="w-10 h-10 bg-orange-500 rounded-full flex items-center justify-center font-bold">

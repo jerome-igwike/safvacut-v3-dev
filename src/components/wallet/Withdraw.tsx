@@ -1,11 +1,13 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { ArrowLeft } from 'lucide-react'
+import { ArrowLeft, Clock } from 'lucide-react'
 import { useUser } from '../../hooks/useUser'
 import { useBalances } from '../../hooks/useBalances'
 import { supabase } from '../../lib/supabase'
 import { toast } from 'sonner'
 import { SUPPORTED_TOKENS, type SupportedToken } from '../../types/database'
+
+const RATE_LIMIT_SECONDS = 30
 
 export function Withdraw() {
   const { user } = useUser()
@@ -14,6 +16,24 @@ export function Withdraw() {
   const [toAddress, setToAddress] = useState('')
   const [amount, setAmount] = useState('')
   const [loading, setLoading] = useState(false)
+  const [timeRemaining, setTimeRemaining] = useState(0)
+
+  useEffect(() => {
+    checkRateLimit()
+    const interval = setInterval(checkRateLimit, 1000)
+    return () => clearInterval(interval)
+  }, [])
+
+  const checkRateLimit = () => {
+    const lastWithdrawalTime = localStorage.getItem(`lastWithdrawal_${user?.id}`)
+    if (lastWithdrawalTime) {
+      const elapsed = Date.now() - parseInt(lastWithdrawalTime)
+      const remaining = Math.max(0, RATE_LIMIT_SECONDS - Math.floor(elapsed / 1000))
+      setTimeRemaining(remaining)
+    } else {
+      setTimeRemaining(0)
+    }
+  }
 
   const getBalance = (token: string) => {
     const balance = balances.find((b) => b.token === token)
@@ -27,6 +47,11 @@ export function Withdraw() {
     
     if (!user?.id) {
       toast.error('You must be logged in')
+      return
+    }
+
+    if (timeRemaining > 0) {
+      toast.error(`Please wait ${timeRemaining} seconds before making another withdrawal`)
       return
     }
 
@@ -64,6 +89,8 @@ export function Withdraw() {
 
       if (error) throw error
 
+      localStorage.setItem(`lastWithdrawal_${user.id}`, Date.now().toString())
+      setTimeRemaining(RATE_LIMIT_SECONDS)
       toast.success('Withdrawal request submitted! An admin will process it shortly.')
       setToAddress('')
       setAmount('')
@@ -160,12 +187,23 @@ export function Withdraw() {
             </p>
           </div>
 
+          {timeRemaining > 0 && (
+            <div className="bg-blue-500/10 border border-blue-500/30 rounded-lg p-4">
+              <div className="flex items-center gap-2 text-blue-400">
+                <Clock className="w-5 h-5" />
+                <p className="text-sm font-medium">
+                  Rate limit: Please wait {timeRemaining} seconds before making another withdrawal
+                </p>
+              </div>
+            </div>
+          )}
+
           <button
             type="submit"
-            disabled={loading || currentBalance === 0}
+            disabled={loading || currentBalance === 0 || timeRemaining > 0}
             className="w-full bg-orange-500 hover:bg-orange-600 disabled:bg-gray-700 disabled:cursor-not-allowed text-white font-semibold py-4 rounded-lg transition-colors"
           >
-            {loading ? 'Submitting...' : 'Submit Withdrawal Request'}
+            {loading ? 'Submitting...' : timeRemaining > 0 ? `Wait ${timeRemaining}s` : 'Submit Withdrawal Request'}
           </button>
         </form>
       </div>

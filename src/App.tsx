@@ -11,6 +11,8 @@ import { Deposit } from './components/wallet/Deposit'
 import { Withdraw } from './components/wallet/Withdraw'
 import { AdminPanel } from './components/admin/AdminPanel'
 import { UserList } from './components/admin/UserList'
+import { TransactionHistory } from './components/wallet/TransactionHistory'
+import { ErrorBoundary } from './components/ErrorBoundary'
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { user, loading } = useUser()
@@ -74,55 +76,65 @@ function App() {
   useRealtimeNotifications(user?.id)
 
   return (
-    <BrowserRouter>
-      <Toaster position="top-center" richColors expand={true} />
-      <Routes>
-        <Route path="/" element={<OnboardingCarousel />} />
-        <Route path="/login" element={<LoginWithBiometric />} />
-        <Route path="/signup" element={<Signup />} />
-        <Route
-          path="/dashboard"
-          element={
-            <ProtectedRoute>
-              <Dashboard />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/deposit"
-          element={
-            <ProtectedRoute>
-              <Deposit />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/withdraw"
-          element={
-            <ProtectedRoute>
-              <Withdraw />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/admin"
-          element={
-            <AdminRoute>
-              <AdminPanel />
-            </AdminRoute>
-          }
-        />
-        <Route
-          path="/admin/users"
-          element={
-            <AdminRoute>
-              <UserList />
-            </AdminRoute>
-          }
-        />
-        <Route path="*" element={<Navigate to="/" replace />} />
-      </Routes>
-    </BrowserRouter>
+    <ErrorBoundary>
+      <BrowserRouter>
+        <Toaster position="top-center" richColors expand={true} />
+        <Routes>
+          <Route path="/" element={<OnboardingCarousel />} />
+          <Route path="/login" element={<LoginWithBiometric />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route
+            path="/dashboard"
+            element={
+              <ProtectedRoute>
+                <Dashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/deposit"
+            element={
+              <ProtectedRoute>
+                <Deposit />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/withdraw"
+            element={
+              <ProtectedRoute>
+                <Withdraw />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/history"
+            element={
+              <ProtectedRoute>
+                <TransactionHistory />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin"
+            element={
+              <AdminRoute>
+                <AdminPanel />
+              </AdminRoute>
+            }
+          />
+          <Route
+            path="/admin/users"
+            element={
+              <AdminRoute>
+                <UserList />
+              </AdminRoute>
+            }
+          />
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </BrowserRouter>
+    </ErrorBoundary>
   )
 }
 

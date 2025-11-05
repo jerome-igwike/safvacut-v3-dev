@@ -1,0 +1,42 @@
+{
+  "name": "Safvacut V3",
+  "short_name": "Safvacut",
+  "description": "Secure crypto wallet and exchange platform",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#111827",
+  "theme_color": "#ea580c",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/logo.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["finance", "utilities"],
+  "screenshots": [],
+  "shortcuts": [
+    {
+      "name": "Deposit",
+      "short_name": "Deposit",
+      "description": "Add funds to your wallet",
+      "url": "/deposit",
+      "icons": [{ "src": "/logo.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Withdraw",
+      "short_name": "Withdraw",
+      "description": "Withdraw funds from your wallet",
+      "url": "/withdraw",
+      "icons": [{ "src": "/logo.png", "sizes": "192x192" }]
+    }
+  ]
+}

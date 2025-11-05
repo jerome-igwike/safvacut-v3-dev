@@ -2,15 +2,18 @@ import { Link } from 'react-router-dom'
 import { useUser } from '../../hooks/useUser'
 import { useBalances } from '../../hooks/useBalances'
 import { usePrices } from '../../hooks/usePrices'
+import { useDarkMode } from '../../contexts/DarkModeContext'
 import { SUPPORTED_TOKENS } from '../../types/database'
 import { motion } from 'framer-motion'
-import { ArrowUpRight, ArrowDownLeft, RefreshCw, LogOut } from 'lucide-react'
+import { ArrowUpRight, ArrowDownLeft, RefreshCw, LogOut, Moon, Sun } from 'lucide-react'
 import { supabase } from '../../lib/supabase'
+import { haptics } from '../../lib/haptics'
 
 export function Dashboard() {
   const { user, profile, isAdmin } = useUser()
   const { balances, loading: balancesLoading } = useBalances(user?.id)
   const { prices, loading: pricesLoading } = usePrices()
+  const { darkMode, toggleDarkMode } = useDarkMode()
 
   const getBalance = (token: string) => {
     const balance = balances.find((b) => b.token === token)
@@ -28,6 +31,7 @@ export function Dashboard() {
   }, 0)
 
   const handleSignOut = async () => {
+    haptics.medium()
     await supabase.auth.signOut()
   }
 
@@ -42,13 +46,25 @@ export function Dashboard() {
               <p className="text-sm text-gray-400">{profile?.uid || 'Loading...'}</p>
             </div>
           </div>
-          <button
-            onClick={handleSignOut}
-            className="flex items-center gap-2 px-4 py-2 bg-gray-800 hover:bg-gray-700 rounded-lg transition-colors"
-          >
-            <LogOut className="w-4 h-4" />
-            Sign Out
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => {
+                haptics.light()
+                toggleDarkMode()
+              }}
+              className="p-2 bg-gray-800 hover:bg-gray-700 rounded-lg transition-colors"
+              aria-label="Toggle dark mode"
+            >
+              {darkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+            </button>
+            <button
+              onClick={handleSignOut}
+              className="flex items-center gap-2 px-4 py-2 bg-gray-800 hover:bg-gray-700 rounded-lg transition-colors"
+            >
+              <LogOut className="w-4 h-4" />
+              Sign Out
+            </button>
+          </div>
         </div>
 
         {isAdmin && (
@@ -76,6 +92,7 @@ export function Dashboard() {
         <div className="grid grid-cols-2 gap-4 mb-8">
           <Link
             to="/deposit"
+            onClick={() => haptics.light()}
             className="bg-gray-800 hover:bg-gray-700 rounded-lg p-6 transition-colors flex flex-col items-center gap-3"
           >
             <div className="bg-green-500/20 p-3 rounded-full">
@@ -86,6 +103,7 @@ export function Dashboard() {
 
           <Link
             to="/withdraw"
+            onClick={() => haptics.light()}
             className="bg-gray-800 hover:bg-gray-700 rounded-lg p-6 transition-colors flex flex-col items-center gap-3"
           >
             <div className="bg-red-500/20 p-3 rounded-full">
